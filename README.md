@@ -98,11 +98,13 @@ export CLOUDFLARE_API_TOKEN=your_token_here
 export CLOUDFLARE_ACCOUNT_ID=your_account_id
 ```
 
-4. Update `wrangler.toml` with your resource IDs:
-   - Create KV namespaces: `npx wrangler kv:namespace create EVENT_INDEX`
-   - Create R2 buckets: `npx wrangler r2 bucket create edgerelay-events-preview`
-   - Create Queues: `npx wrangler queues create edgerelay-events-preview`
-   - Update the placeholder IDs in `wrangler.toml`
+4. Set up Cloudflare resources:
+   
+   Follow the detailed [Cloudflare Setup Guide](./CLOUDFLARE_SETUP.md) to configure:
+   - KV namespaces for event indices
+   - R2 buckets for event storage
+   - Queues for event processing
+   - GitHub Actions secrets for automated deployment
 
 ### Development
 
@@ -274,6 +276,14 @@ npx wrangler tail --env production
 
 ## Contributing
 
+We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for detailed information on:
+- Setting up your development environment
+- Coding standards and guidelines
+- Testing requirements
+- Pull request process
+
+### Quick Guidelines
+
 We follow strict development standards:
 
 ### Commit Messages
@@ -304,6 +314,14 @@ Version numbers follow [Semantic Versioning (SemVer)](https://semver.org/) and a
 ## Development Roadmap
 
 See [DEVELOPMENT.md](./DEVELOPMENT.md) for the comprehensive step-by-step development outline and implementation phases.
+
+## Documentation
+
+- **[README.md](./README.md)** - This file, project overview and getting started
+- **[DEVELOPMENT.md](./DEVELOPMENT.md)** - Comprehensive development roadmap with 12 implementation phases
+- **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Contribution guidelines and development workflow
+- **[CLOUDFLARE_SETUP.md](./CLOUDFLARE_SETUP.md)** - Step-by-step guide for setting up Cloudflare resources
+- **[LICENSE](./LICENSE)** - MIT License
 
 ## License
 
