@@ -52,7 +52,7 @@ function textResponse(text: string, status = 200): Response {
  * Main Worker handler
  */
 export default {
-  fetch(request: Request, env: Env, _ctx: ExecutionContext): Response {
+  async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
     try {
       const url = new URL(request.url);
 
