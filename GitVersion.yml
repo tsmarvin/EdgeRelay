@@ -1,0 +1,41 @@
+mode: ContinuousDeployment
+branches:
+  main:
+    tag: ''
+    increment: Patch
+    prevent-increment-of-merged-branch-version: true
+    track-merge-target: false
+    regex: ^main$
+    source-branches: ['develop']
+    is-release-branch: true
+  develop:
+    tag: 'beta'
+    increment: Minor
+    prevent-increment-of-merged-branch-version: false
+    track-merge-target: true
+    regex: ^develop$
+    source-branches: []
+    is-release-branch: false
+  feature:
+    tag: 'alpha'
+    increment: Minor
+    prevent-increment-of-merged-branch-version: false
+    track-merge-target: false
+    regex: ^features?[/-]
+    source-branches: ['develop']
+  pull-request:
+    tag: 'pr'
+    increment: Inherit
+    prevent-increment-of-merged-branch-version: false
+    tag-number-pattern: '[/-](?<number>\d+)'
+    track-merge-target: false
+    regex: ^(pull|pull\-requests|pr)[/-]
+    source-branches: ['develop', 'main', 'feature']
+commit-message-incrementing: Enabled
+major-version-bump-message: "^(breaking|major)(\\(.+\\))?:"
+minor-version-bump-message: "^(feat|feature|minor)(\\(.+\\))?:"
+patch-version-bump-message: "^(fix|patch|chore|docs|style|refactor|perf|test)(\\(.+\\))?:"
+no-bump-message: "^(skip|none)(\\(.+\\))?:"
+ignore:
+  sha: []
+merge-message-formats: {}
