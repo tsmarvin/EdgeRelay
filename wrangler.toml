@@ -39,7 +39,7 @@ max_batch_timeout = 30
 name = "edgerelay-dev"
 vars = { ENVIRONMENT = "develop" }
 
-[env.develop.durable_objects.bindings]
+[[env.develop.durable_objects.bindings]]
 name = "RELAY_STATE"
 class_name = "RelayState"
 script_name = "edgerelay-dev"
@@ -65,7 +65,7 @@ max_batch_timeout = 30
 name = "edgerelay-prod"
 vars = { ENVIRONMENT = "production" }
 
-[env.production.durable_objects.bindings]
+[[env.production.durable_objects.bindings]]
 name = "RELAY_STATE"
 class_name = "RelayState"
 script_name = "edgerelay-prod"

@@ -25,8 +25,12 @@ This will open a browser window for you to authenticate with Cloudflare.
    - Account - Workers Scripts - Edit
    - Account - Workers KV Storage - Edit
    - Account - Workers R2 Storage - Edit
-   - Account - Cloudflare Pages - Edit
-   - Account - D1 - Edit
+   - (Optional) If you use Queues: Account - Workers Queues - Edit
+
+   > **Security Note:**  
+   > Grant only the minimal permissions required. Do **not** add `Cloudflare Pages - Edit` or `D1 - Edit` unless your deployment specifically needs them.  
+   > For best security, use a separate API token per project/environment.
+
 3. Save the token and set it as an environment variable:
 
 ```bash
