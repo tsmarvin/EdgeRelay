@@ -1,0 +1,93 @@
+#:schema node_modules/wrangler/config-schema.json
+name = "edgerelay"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+workers_dev = true
+
+# Observability
+[observability]
+enabled = true
+
+# Durable Objects bindings
+[[durable_objects.bindings]]
+name = "RELAY_STATE"
+class_name = "RelayState"
+script_name = "edgerelay"
+
+# KV Namespaces
+[[kv_namespaces]]
+binding = "EVENT_INDEX"
+id = "preview_id_placeholder"
+
+# R2 Buckets for event storage
+[[r2_buckets]]
+binding = "EVENT_STORAGE"
+bucket_name = "edgerelay-events-preview"
+
+# Queues for event fan-out
+[[queues.producers]]
+binding = "EVENT_QUEUE"
+queue = "edgerelay-events-preview"
+
+[[queues.consumers]]
+queue = "edgerelay-events-preview"
+max_batch_size = 100
+max_batch_timeout = 30
+
+# Environment-specific configurations
+[env.develop]
+name = "edgerelay-dev"
+vars = { ENVIRONMENT = "develop" }
+
+[[env.develop.durable_objects.bindings]]
+name = "RELAY_STATE"
+class_name = "RelayState"
+script_name = "edgerelay-dev"
+
+[[env.develop.kv_namespaces]]
+binding = "EVENT_INDEX"
+id = "develop_id_placeholder"
+
+[[env.develop.r2_buckets]]
+binding = "EVENT_STORAGE"
+bucket_name = "edgerelay-events-dev"
+
+[[env.develop.queues.producers]]
+binding = "EVENT_QUEUE"
+queue = "edgerelay-events-dev"
+
+[[env.develop.queues.consumers]]
+queue = "edgerelay-events-dev"
+max_batch_size = 100
+max_batch_timeout = 30
+
+[env.production]
+name = "edgerelay-prod"
+vars = { ENVIRONMENT = "production" }
+
+[[env.production.durable_objects.bindings]]
+name = "RELAY_STATE"
+class_name = "RelayState"
+script_name = "edgerelay-prod"
+
+[[env.production.kv_namespaces]]
+binding = "EVENT_INDEX"
+id = "production_id_placeholder"
+
+[[env.production.r2_buckets]]
+binding = "EVENT_STORAGE"
+bucket_name = "edgerelay-events-prod"
+
+[[env.production.queues.producers]]
+binding = "EVENT_QUEUE"
+queue = "edgerelay-events-prod"
+
+[[env.production.queues.consumers]]
+queue = "edgerelay-events-prod"
+max_batch_size = 100
+max_batch_timeout = 30
+
+# Migrations for Durable Objects
+[[migrations]]
+tag = "v1"
+new_classes = ["RelayState"]
