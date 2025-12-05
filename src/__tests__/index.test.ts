@@ -10,13 +10,24 @@ describe('EdgeRelay Worker', () => {
       ENVIRONMENT: 'test',
     };
 
-    it('should return health status on /health endpoint', async () => {
+    it('should handle CORS preflight requests', async () => {
+      const { default: worker } = await import('../index');
+      const request = new Request('http://localhost/health', { method: 'OPTIONS' });
+      const response = worker.fetch(request, mockEnv, {} as ExecutionContext);
+
+      expect(response.status).toBe(204);
+      expect(response.headers.get('Access-Control-Allow-Origin')).toBe('*');
+      expect(response.headers.get('Access-Control-Allow-Methods')).toBe('GET, POST, OPTIONS');
+    });
+
+    it('should return health status on /health endpoint with CORS headers', async () => {
       const { default: worker } = await import('../index');
       const request = new Request('http://localhost/health');
       const response = worker.fetch(request, mockEnv, {} as ExecutionContext);
 
       expect(response.status).toBe(200);
       expect(response.headers.get('Content-Type')).toBe('application/json');
+      expect(response.headers.get('Access-Control-Allow-Origin')).toBe('*');
 
       const text = await response.text();
       const data = JSON.parse(text) as { status: string; environment: string; timestamp: string };
@@ -25,13 +36,14 @@ describe('EdgeRelay Worker', () => {
       expect(data.timestamp).toBeDefined();
     });
 
-    it('should return service info on root endpoint', async () => {
+    it('should return service info on root endpoint with CORS headers', async () => {
       const { default: worker } = await import('../index');
       const request = new Request('http://localhost/');
       const response = worker.fetch(request, mockEnv, {} as ExecutionContext);
 
       expect(response.status).toBe(200);
       expect(response.headers.get('Content-Type')).toBe('application/json');
+      expect(response.headers.get('Access-Control-Allow-Origin')).toBe('*');
 
       const text = await response.text();
       const data = JSON.parse(text) as {
@@ -54,6 +66,7 @@ describe('EdgeRelay Worker', () => {
       const response = worker.fetch(request, mockEnv, {} as ExecutionContext);
 
       expect(response.status).toBe(501);
+      expect(response.headers.get('Access-Control-Allow-Origin')).toBe('*');
       expect(await response.text()).toBe('Firehose endpoint - Coming soon');
     });
 
@@ -63,6 +76,7 @@ describe('EdgeRelay Worker', () => {
       const response = worker.fetch(request, mockEnv, {} as ExecutionContext);
 
       expect(response.status).toBe(501);
+      expect(response.headers.get('Access-Control-Allow-Origin')).toBe('*');
       expect(await response.text()).toBe('Jetstream endpoint - Coming soon');
     });
 
@@ -72,6 +86,7 @@ describe('EdgeRelay Worker', () => {
       const response = worker.fetch(request, mockEnv, {} as ExecutionContext);
 
       expect(response.status).toBe(404);
+      expect(response.headers.get('Access-Control-Allow-Origin')).toBe('*');
       expect(await response.text()).toBe('Not Found');
     });
   });

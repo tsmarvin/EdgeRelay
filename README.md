@@ -333,6 +333,7 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 - [Bluesky AT Protocol GitHub](https://github.com/bluesky-social/atproto)
 - [Indigo Relay Implementation](https://github.com/bluesky-social/indigo/blob/main/cmd/relay/README.md)
 - [Microcosm Constellation Relay](https://www.microcosm.blue/)
+- [Microcosm UFOs (Example Relay)](https://ufos.microcosm.blue/)
 - [Cloudflare Workers Documentation](https://developers.cloudflare.com/workers/)
 - [Wrangler CLI Documentation](https://developers.cloudflare.com/workers/wrangler/)
 

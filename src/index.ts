@@ -14,30 +14,68 @@ export interface Env {
 }
 
 /**
+ * CORS headers for cross-origin requests
+ */
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
+/**
+ * Create a JSON response with CORS headers
+ */
+function jsonResponse(data: unknown, status = 200): Response {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      'Content-Type': 'application/json',
+      ...CORS_HEADERS,
+    },
+  });
+}
+
+/**
+ * Create a text response with CORS headers
+ */
+function textResponse(text: string, status = 200): Response {
+  return new Response(text, {
+    status,
+    headers: {
+      'Content-Type': 'text/plain',
+      ...CORS_HEADERS,
+    },
+  });
+}
+
+/**
  * Main Worker handler
  */
 export default {
   fetch(request: Request, env: Env, _ctx: ExecutionContext): Response {
-    const url = new URL(request.url);
+    try {
+      const url = new URL(request.url);
 
-    // Health check endpoint
-    if (url.pathname === '/health') {
-      return new Response(
-        JSON.stringify({
+      // Handle CORS preflight requests
+      if (request.method === 'OPTIONS') {
+        return new Response(null, {
+          status: 204,
+          headers: CORS_HEADERS,
+        });
+      }
+
+      // Health check endpoint
+      if (url.pathname === '/health') {
+        return jsonResponse({
           status: 'ok',
           environment: env.ENVIRONMENT ?? 'unknown',
           timestamp: new Date().toISOString(),
-        }),
-        {
-          headers: { 'Content-Type': 'application/json' },
-        }
-      );
-    }
+        });
+      }
 
-    // API version endpoint
-    if (url.pathname === '/') {
-      return new Response(
-        JSON.stringify({
+      // API version endpoint
+      if (url.pathname === '/') {
+        return jsonResponse({
           name: 'EdgeRelay',
           description: 'AT Protocol Relay for Cloudflare Workers',
           version: '0.0.0',
@@ -46,24 +84,31 @@ export default {
             firehose: '/xrpc/com.atproto.sync.subscribeRepos',
             jetstream: '/jetstream',
           },
-        }),
+        });
+      }
+
+      // Placeholder for firehose endpoint
+      if (url.pathname === '/xrpc/com.atproto.sync.subscribeRepos') {
+        return textResponse('Firehose endpoint - Coming soon', 501);
+      }
+
+      // Placeholder for jetstream endpoint
+      if (url.pathname === '/jetstream') {
+        return textResponse('Jetstream endpoint - Coming soon', 501);
+      }
+
+      return textResponse('Not Found', 404);
+    } catch (error) {
+      // Basic error handling
+      console.error('Worker error:', error);
+      return jsonResponse(
         {
-          headers: { 'Content-Type': 'application/json' },
-        }
+          error: 'Internal Server Error',
+          message: error instanceof Error ? error.message : 'Unknown error',
+        },
+        500
       );
     }
-
-    // Placeholder for firehose endpoint
-    if (url.pathname === '/xrpc/com.atproto.sync.subscribeRepos') {
-      return new Response('Firehose endpoint - Coming soon', { status: 501 });
-    }
-
-    // Placeholder for jetstream endpoint
-    if (url.pathname === '/jetstream') {
-      return new Response('Jetstream endpoint - Coming soon', { status: 501 });
-    }
-
-    return new Response('Not Found', { status: 404 });
   },
 };
 
