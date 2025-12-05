@@ -32,8 +32,8 @@ EdgeRelay is an AT Protocol Relay implementation built specifically for Cloudfla
 - All async functions must properly handle errors and return typed responses
 
 ### Code Quality
-- Follow ESLint rules if configured (run `npm run lint` before committing)
-- Use Prettier for code formatting if configured (run `npm run format`)
+- Configure and use ESLint for code quality (run `npm run lint` before committing)
+- Configure and use Prettier for consistent code formatting (run `npm run format`)
 - Write clear, concise comments for complex logic, especially AT Protocol-specific handling
 - Document all public functions and exported modules
 
@@ -71,7 +71,8 @@ EdgeRelay is an AT Protocol Relay implementation built specifically for Cloudfla
 ## AT Protocol Relay Specifics
 
 ### Message Handling
-- Follow AT Protocol specifications for message formats and schemas
+- **ALWAYS follow the AT Protocol specifications strictly** for message formats and schemas
+- When in doubt, look up the latest specification documentation at [atproto.com](https://atproto.com/)
 - Validate AT Protocol message structures before processing
 - Handle streaming data efficiently using Workers' native fetch and stream APIs
 - Implement proper backpressure handling for relayed streams
@@ -85,7 +86,7 @@ EdgeRelay is an AT Protocol Relay implementation built specifically for Cloudfla
 
 ### Local Testing
 - Test locally with `wrangler dev` before deploying
-- Use Miniflare or similar tools for unit testing if available
+- Use Miniflare for unit testing Workers code
 - Mock external dependencies appropriately
 - Test edge cases and error conditions
 
@@ -112,6 +113,14 @@ EdgeRelay is an AT Protocol Relay implementation built specifically for Cloudfla
 - Never modify `.git/` directory or git configuration
 - Do not commit build artifacts or `node_modules/`
 - Do not add or modify CI/CD workflows without explicit request
+
+### Communication Guidelines
+- Do not create extraneous documents (like PLAN.md, NOTES.md, TODO.md) in the repository to communicate with developers
+- Internal notes for Copilot review can be placed in a designated location (e.g., `.copilot/` directory)
+- All communication to end users should go through:
+  - README.md for project documentation and setup instructions
+  - Pull request comments for code review feedback and discussions
+  - Code comments for implementation details that need to be preserved in the codebase
 
 ### Security Requirements
 - Never commit API keys, tokens, or secrets
